@@ -57,40 +57,112 @@
             scroll-behavior: smooth;
         }
 
-        /* --- UPDATED NAVIGATION BAR STYLES --- */
+        /* =================================== */
+        /* --- FINAL, ROBUST NAVBAR STYLES --- */
+        /* =================================== */
+
+        /* Main navbar container */
         .navbar {
             position: relative;
-            /* Required for the pseudo-element */
+            z-index: 9999;
+            /* Ensures it's on top of all content */
+            min-height: 70px;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
             background-color: var(--background-dark);
-            /* This is the right-side color */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            /* Hides any overflow from the pseudo-element */
         }
 
-        /* This ::before pseudo-element creates the left-side background */
-        .navbar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0%;
-            /* This controls how much of the bar is light. Adjust as needed. */
-            height: 100%;
-            background-color: var(--background-light);
-            /* This is the left-side color */
-            z-index: 0;
+        /* The container for the text and logos */
+        .navbar-brand {
+            min-width: 0;
+            /* Allows the container to shrink */
         }
 
-        /* We need to make sure the navbar content sits ON TOP of the background */
-        .navbar>.container {
-            position: relative;
-            z-index: 1;
+        /* Controls the text part */
+        .navbar-brand span {
+            font-weight: bold;
+            color: var(--text-light);
+            white-space: nowrap;
+            /* Prevents the text itself from wrapping */
         }
 
+        /* Controls BOTH logos with a single, consistent rule */
         .nav-logo {
-            height: 50px;
+            height: 40px;
+            /* A sensible height for a 70px tall bar */
             width: auto;
+            flex-shrink: 0;
+            /* Prevents logos from being distorted */
+        }
+
+
+        /* --- MOBILE STYLES FOR NAV BAR --- */
+
+        /* Targets tablets and smaller devices */
+        @media (max-width: 991.98px) {
+
+            /* On mobile, use the split background */
+            .navbar::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 60%;
+                /* Adjusted width for the long text */
+                height: 100%;
+                background-color: var(--background-light);
+                z-index: 0;
+            }
+
+            .navbar>.container {
+                position: relative;
+                z-index: 1;
+            }
+
+            .navbar-brand span {
+                color: #212529;
+                /* Make text dark on the light background */
+            }
+
+            /* --- NEWLY ADDED STYLES FOR COLLAPSED MENU --- */
+
+            /* Style the container that wraps the menu links */
+            .navbar-collapse {
+                background-color: var(--background-dark);
+                padding: 1rem;
+                border-radius: 0 0 15px 15px;
+                /* Rounded bottom corners */
+                margin-top: 0.5rem;
+                /* Adds a little space below the main bar */
+            }
+
+            /* Style the individual links inside the collapsed menu */
+            .navbar-nav .nav-link {
+                color: var(--text-light);
+                padding: 0.75rem 0;
+                text-align: center;
+            }
+
+            .navbar-nav .nav-link:hover {
+                color: var(--primary-purple);
+            }
+
+            /* --- END OF NEW STYLES --- */
+        }
+
+        /* Targets only very small phone screens */
+        @media (max-width: 576px) {
+
+            /* HIDE the long text to create space */
+            .navbar-brand span {
+                display: none;
+            }
+
+            /* Remove the split background when text is hidden */
+            .navbar::before {
+                display: none;
+            }
         }
 
         /* Custom Button Style */
@@ -495,6 +567,83 @@
             font-size: 1.1rem;
             line-height: 1.6;
         }
+
+        /* =================================== */
+        /* --- MOBILE OPTIMIZATION STYLES --- */
+        /* =================================== */
+
+        /* This targets all screens smaller than 992px (tablets and phones) */
+        @media (max-width: 991.98px) {
+
+            /* 1. Fix the Navigation Bar (Keep these styles) */
+            .navbar::before {
+                display: none;
+            }
+
+            .navbar {
+                background-color: var(--background-dark) !important;
+            }
+
+            .navbar-brand span {
+                color: var(--text-light) !important;
+            }
+
+
+
+            /* === NEW & FINAL HERO SECTION FIXES === */
+
+            /* 2. Add padding and prevent any horizontal overflow as a failsafe */
+            .hero-content {
+                padding-left: 1rem;
+                padding-right: 1rem;
+                overflow-x: hidden;
+                /* Prevents anything from breaking out */
+            }
+
+            /* 3. Allow logos to stack on top of each other on small screens */
+            .hero-logos {
+                display: flex;
+                flex-wrap: wrap;
+                /* This is the key change! */
+                justify-content: center;
+                align-items: center;
+            }
+
+            /* 4. Control logo size more effectively with max-width */
+            .hero-logos img {
+                max-width: 45%;
+                /* Limits width to a percentage of the screen */
+                height: auto;
+                /* Maintains aspect ratio */
+                max-height: 80px !important;
+            }
+
+            /* 5. Force all text to wrap correctly */
+            #hero h1,
+            #hero p {
+                overflow-wrap: break-word;
+                word-break: break-word;
+            }
+
+            #hero h1 {
+                font-size: 2.2rem;
+            }
+
+            /* === END OF NEW HERO FIXES === */
+
+            /* 6. Center-align other sections (Keep these styles) */
+            .schedule-item .text-md-start {
+                text-align: center !important;
+            }
+
+            .schedule-time {
+                margin-bottom: 0.5rem;
+            }
+
+            .venue-details {
+                text-align: center !important;
+            }
+        }
     </style>
 </head>
 
@@ -502,17 +651,18 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
+
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <span class="me-3" style="font-weight: bold; color: #adb5bd;">UofG IBM Qiskit Fall Fest</span>
-
+                <span class="navbar-brand-text me-2">UofG IBM Qiskit Fall Fest</span>
                 <img src="images/UoG_keyline.png" alt="University Logo" class="nav-logo">
-
-                <img src="images/Qiskit.svg" alt="IBM Logo" class="nav-logo ms-2" style="height: 100px;">
+                <img src="images/Qiskit.svg" alt="IBM Logo" class="nav-logo ms-2">
             </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
                     <li class="nav-item">
@@ -529,10 +679,12 @@
                     </li>
                     <li class="nav-item ms-lg-3">
                         <a class="btn btn-register"
-                            href="https://docs.google.com/forms/d/e/1FAIpQLSf8Rl3SApBdN5Ou0iWAW3qJ2EYjYNxj_S6Sz2oL_RU9_PccHg/viewform?usp=header">Register</a>
+                            href="https://docs.google.com/forms/d/e/1FAIpQLSf8Rl3SApBdN5Ou0iWAW3qJ2EYjYNxj_S6Sz2oL_RU9_PccHg/viewform?usp=header"
+                            target="_blank">Register</a>
                     </li>
                 </ul>
             </div>
+
         </div>
     </nav>
 
@@ -551,7 +703,7 @@
         </div>
     </header>
 
-    <section id="schedule" class="py-5">
+    <section id="textbox" class="py-5">
         <div class="container">
             <div class="card event-info-card mx-auto">
                 <div class="card-body text-center">
@@ -643,7 +795,7 @@
             </div>
         </section>
 
-        <section class="text-center">
+        <section id="schedule" class="text-center">
             <div class="container">
                 <h2>Event Schedule</h2>
 
